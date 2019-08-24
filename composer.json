@@ -13,7 +13,7 @@
     "require": {
         "datto/json-rpc-http": "^5.0",
         "arthurkushman/php-wss": "^1.4",
-        "php": ">=7.1",
+        "php": ">=7.0",
         "ext-json": "*"
     },
     "autoload": {
