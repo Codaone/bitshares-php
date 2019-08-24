@@ -1,0 +1,24 @@
+{
+    "name": "codaone/bitshares-php",
+    "description": "BitShares php library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Juhani Haapala",
+            "email": "juhani@codaone.fi"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "datto/json-rpc-http": "^5.0",
+        "arthurkushman/php-wss": "^1.4",
+        "php": ">=7.1",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codaone\\Bitshares\\": "src"
+        }
+    }
+}
