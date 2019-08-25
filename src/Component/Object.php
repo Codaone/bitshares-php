@@ -1,9 +1,16 @@
 <?php
 
-namespace Codaone\Bitshares\Components;
+namespace Codaone\BitShares\Component;
 
-class Object
+/**
+ * Class Object
+ * @package Codaone\BitShares\Component
+ */
+class Object implements \ArrayAccess, \Iterator
 {
+    /**
+     * @var array
+     */
     private $_data = [];
 
     /** @var array */
@@ -12,21 +19,28 @@ class Object
     /** @var self[] */
     private static $_dataCache;
 
-    public function setCacheData($bucket, $key, $value = null) {
-        if(!isset(self::$_dataCache[$bucket])) {
+    protected function setCacheData($bucket, $key, $value = null)
+    {
+        if (!isset(self::$_dataCache[$bucket])) {
             self::$_dataCache[$bucket] = new self();
         }
         self::$_dataCache[$bucket]->setData($key, $value);
     }
 
-    public function getCacheData($bucket, $key){
-        if(isset(self::$_dataCache[$bucket])) {
-            self::$_dataCache[$bucket]->getData($key);
+    protected function getCacheData($bucket, $key)
+    {
+        if (isset(self::$_dataCache[$bucket])) {
+            return self::$_dataCache[$bucket]->getData($key);
         }
         return null;
     }
 
-    public function setData($key, $value = null) {
+    /**
+     * @param mixed|array $key
+     * @param null        $value
+     */
+    public function setData($key, $value = null)
+    {
         if ($key === (array)$key) {
             $this->_data = $key;
         } else {
@@ -34,12 +48,17 @@ class Object
         }
     }
 
+    /**
+     * @param null $key
+     * @return $this
+     */
     public function unsetData($key = null)
     {
         if ($key === null) {
             $this->setData([]);
         } elseif (is_string($key)) {
-            if (isset($this->_data[$key]) || array_key_exists($key, $this->_data)) {
+            if (isset($this->_data[$key]) || array_key_exists($key,
+                    $this->_data)) {
                 unset($this->_data[$key]);
             }
         } elseif ($key === (array)$key) {
@@ -50,6 +69,11 @@ class Object
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @param null   $index
+     * @return array|mixed|null
+     */
     public function getData($key = '', $index = null)
     {
         if ('' === $key) {
@@ -62,8 +86,9 @@ class Object
         } else {
             if (isset($this->_data[$key])) {
                 $data = $this->_data[$key];
+            } else {
+                $data = null;
             }
-            $data = null;
         }
 
         if ($index !== null) {
@@ -81,6 +106,10 @@ class Object
         return $data;
     }
 
+    /**
+     * @param $path
+     * @return array|mixed|null
+     */
     public function getDataByPath($path)
     {
         $keys = explode('/', $path);
@@ -122,8 +151,72 @@ class Object
         if (isset(self::$_underscoreCache[$name])) {
             return self::$_underscoreCache[$name];
         }
-        $result = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $name), '_'));
+        $result                        = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/',
+            "_$1", $name), '_'));
         self::$_underscoreCache[$name] = $result;
         return $result;
+    }
+
+    /** ArrayAccess stuff */
+
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->_data[] = $value;
+        } else {
+            $this->_data[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->$offset) || isset($this->_data[$offset]);
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->$offset);
+        unset($this->_data[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        if (isset($this->$offset)) {
+            return $this->$offset;
+        } else {
+            return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
+        }
+    }
+
+    /** Iterator stuff */
+
+    public function rewind()
+    {
+        reset($this->_data);
+    }
+
+    public function current()
+    {
+        $var = current($this->_data);
+        return $var;
+    }
+
+    public function key()
+    {
+        $var = key($this->_data);
+        return $var;
+    }
+
+    public function next()
+    {
+        $var = next($this->_data);
+        return $var;
+    }
+
+    public function valid()
+    {
+        $key = key($this->_data);
+        $var = ($key !== null && $key !== false);
+        return $var;
     }
 }
