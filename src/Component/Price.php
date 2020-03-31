@@ -1,6 +1,7 @@
 <?php
 
 namespace Codaone\BitShares\Component;
+use Codaone\BitShares\Component\Base\Object;
 
 /**
  * Class Price

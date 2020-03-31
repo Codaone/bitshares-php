@@ -3,6 +3,7 @@
 namespace Codaone\BitShares\Component;
 
 use Codaone\BitShares\BitShares;
+use Codaone\BitShares\Component\Base\Object;
 
 /**
  * Class Market
@@ -105,7 +106,7 @@ class Market extends Object
             );
         }
         $data = ["asks" => $asks, "bids" => $bids];
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($data);
         return $dataObject;
     }
@@ -126,7 +127,7 @@ class Market extends Object
         $data['highest_bid'] = new Price($this->getBase(), $this->getQuote(), $ticker["highest_bid"]);
         $data['latest'] = new Price($this->getBase(), $this->getQuote(), $ticker["latest"]);
         $data['percent_change'] = floatval($ticker['percent_change']);
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($data);
         return $dataObject;
     }
@@ -154,7 +155,7 @@ class Market extends Object
             $start->format('Y-m-d\TH:i:s'),
             $limit
         );
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($trades);
         return $dataObject;
     }
@@ -181,7 +182,7 @@ class Market extends Object
                 $data[] = $trade;
             }
         }
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($data);
         return $dataObject;
     }
@@ -206,7 +207,7 @@ class Market extends Object
                 $data[] = $order;
             }
         }
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($data);
         return $dataObject;
     }
