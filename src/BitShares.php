@@ -2,6 +2,8 @@
 
 namespace Codaone\BitShares;
 
+use Codaone\BitShares\Exceptions\BitSharesException;
+
 /**
  * Class BitShares
  * @package Codaone\BitShares
@@ -89,17 +91,25 @@ namespace Codaone\BitShares;
  * @method verifyAuthority($args)
  * @method call($api, $method, $args)
  */
-class BitShares extends Component\Object
+class BitShares extends Component\Base\Object
 {
+    /** @var bool */
     private static $initialized;
 
+    /** @var \WSSC\WebSocketClient */
     private static $wssClient;
+
+    /** @var \Datto\JsonRpc\Client */
     private static $rpcClient;
 
+    /**
+     * BitShares constructor.
+     * @param string $node
+     */
     public function __construct($node = 'wss://btsws.roelandp.nl/ws')
     {
         // @todo add nodelist and find and use first working node
-        if(!self::$initialized) {
+        if (!self::$initialized) {
             $clientConfig    = new \WSSC\Components\ClientConfig();
             self::$rpcClient = new \Datto\JsonRpc\Client();
             try {
@@ -108,10 +118,18 @@ class BitShares extends Component\Object
                 throw new $e;
             }
             self::$initialized = true;
-            return $this;
         }
     }
 
+    /**
+     * @param $method
+     * @param $args
+     * @return array|mixed|null
+     * @throws BitSharesException
+     * @throws \WSSC\Exceptions\BadOpcodeException
+     * @throws \WSSC\Exceptions\BadUriException
+     * @throws \WSSC\Exceptions\ConnectionException
+     */
     public function __call($method, $args)
     {
         $method = $this->_underscore($method);
@@ -120,6 +138,11 @@ class BitShares extends Component\Object
         return $response;
     }
 
+    /**
+     * @param $method
+     * @param $data
+     * @return string|null
+     */
     private function getRpcRequest($method, $data)
     {
         self::$rpcClient->reset();
@@ -127,6 +150,14 @@ class BitShares extends Component\Object
         return self::$rpcClient->encode();
     }
 
+    /**
+     * @param $rpcData
+     * @return mixed
+     * @throws BitSharesException
+     * @throws \WSSC\Exceptions\BadOpcodeException
+     * @throws \WSSC\Exceptions\BadUriException
+     * @throws \WSSC\Exceptions\ConnectionException
+     */
     private function getWssResponse($rpcData)
     {
         // @todo exception and error handling
@@ -135,13 +166,19 @@ class BitShares extends Component\Object
         return $this->getResponse($result);
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     * @throws BitSharesException
+     */
     private function getResponse($data)
     {
         $array = json_decode($data, true);
         if (isset($array['result'])) {
             return $array['result'];
+        } elseif(isset($array['error'])) {
+            throw new BitSharesException($array['error']['message']);
         } else {
-            // @todo handle errors instead of return wrong data
             return $array;
         }
     }

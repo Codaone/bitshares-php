@@ -3,6 +3,7 @@
 namespace Codaone\BitShares\Component;
 
 use Codaone\BitShares\BitShares;
+use Codaone\BitShares\Component\Base\Object;
 
 /**
  * Class Asset

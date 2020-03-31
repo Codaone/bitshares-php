@@ -3,6 +3,7 @@
 namespace Codaone\BitShares\Component;
 
 use Codaone\BitShares\BitShares;
+use Codaone\BitShares\Component\Base\Object;
 
 /**
  * Class Account
@@ -46,7 +47,7 @@ class Account extends Object
         foreach ($orders as &$o) {
             $o = new Order($o);
         }
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($orders);
         return $dataObject;
     }
@@ -58,9 +59,9 @@ class Account extends Object
         $this->ensureFull();
         $balances = $this->getData('balances');
         foreach($balances as &$b) {
-            $b = new Amount($b['amount'], $b['id']);
+            $b = new Amount($b['balance'], $b['asset_type']);
         }
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($balances);
         return $dataObject;
     }
@@ -89,7 +90,7 @@ class Account extends Object
         $bitShares = new BitShares();
         // @todo maybe history api calls should be easier
         $history = $bitShares->call("history", "get_account_history", [$this->getId(), "1.11.0", 100, "1.11.-1"]);
-        $dataObject = new Object();
+        $dataObject = new Object;
         $dataObject->setData($history);
         return $dataObject;
     }
