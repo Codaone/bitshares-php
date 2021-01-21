@@ -3,7 +3,7 @@
 namespace Codaone\BitShares\Component;
 
 use Codaone\BitShares\BitShares;
-use Codaone\BitShares\Component\Base\Object;
+use Codaone\BitShares\Component\Base\DataClass;
 
 /**
  * Class Asset
@@ -13,7 +13,7 @@ use Codaone\BitShares\Component\Base\Object;
  * @method string getSymbol
  * @method string|integer getPrecision
  */
-class Asset extends Object
+class Asset extends DataClass
 {
     public function __construct($asset)
     {

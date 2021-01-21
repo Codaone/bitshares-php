@@ -3,7 +3,7 @@
 namespace Codaone\BitShares\Component;
 
 use Codaone\BitShares\BitShares;
-use Codaone\BitShares\Component\Base\Object;
+use Codaone\BitShares\Component\Base\DataClass;
 
 /**
  * Class Account
@@ -12,7 +12,7 @@ use Codaone\BitShares\Component\Base\Object;
  * @method getId
  * @method getName
  */
-class Account extends Object
+class Account extends DataClass
 {
     private $full;
 
@@ -39,7 +39,7 @@ class Account extends Object
     }
 
     /**
-     * @return Object|Order[]
+     * @return DataClass|Order[]
      */
     public function getOpenOrders() {
         $this->ensureFull();
@@ -47,21 +47,21 @@ class Account extends Object
         foreach ($orders as &$o) {
             $o = new Order($o);
         }
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($orders);
         return $dataObject;
     }
 
     /**
-     * @return Object|Amount[]
+     * @return DataClass|Amount[]
      */
     public function getBalances() {
         $this->ensureFull();
         $balances = $this->getData('balances');
         foreach($balances as &$b) {
-            $b = new Amount($b['balance'], $b['asset_type']);
+            $b = new Amount($b['balance'], $b['asset_type'], false);
         }
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($balances);
         return $dataObject;
     }
@@ -84,13 +84,13 @@ class Account extends Object
     }
 
     /**
-     * @return Object|array
+     * @return DataClass|array
      */
     public function getHistory() {
         $bitShares = new BitShares();
         // @todo maybe history api calls should be easier
         $history = $bitShares->call("history", "get_account_history", [$this->getId(), "1.11.0", 100, "1.11.-1"]);
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($history);
         return $dataObject;
     }

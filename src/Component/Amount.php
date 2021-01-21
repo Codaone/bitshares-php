@@ -1,13 +1,13 @@
 <?php
 
 namespace Codaone\BitShares\Component;
-use Codaone\BitShares\Component\Base\Object;
+use Codaone\BitShares\Component\Base\DataClass;
 
 /**
  * Class Amount
  * @package Codaone\BitShares\Component
  */
-class Amount extends Object
+class Amount extends DataClass
 {
     /** @var int */
     protected $amount;
@@ -19,9 +19,9 @@ class Amount extends Object
      * Amount constructor.
      * @param integer|float|string $amount
      * @param null                 $asset
-     * @param bool                 $notInteger
+     * @param bool                 $amountAsFloat
      */
-    public function __construct($amount, $asset = null, $notInteger = true)
+    public function __construct($amount, $asset = null, $amountAsFloat = true)
     {
         if (!$asset) {
             list($amount, $asset) = explode(" ", $amount);
@@ -31,7 +31,7 @@ class Amount extends Object
         } else {
             $this->asset = $asset;
         }
-        if ($notInteger) {
+        if ($amountAsFloat) {
             $this->amount = $amount * 10 ** $this->getPrecision();
         } else {
             $this->amount = $amount;

@@ -37,7 +37,7 @@ use Codaone\BitShares\Exceptions\BitSharesException;
  * @method getCommitteeMembers($args)
  * @method getConfig($args)
  * @method getDynamicGlobalProperties($args)
- * @method getFullAccounts($args, $args1)
+ * @method getFullAccounts(array $args, $args1 = []) array
  * @method getGlobalProperties($args)
  * @method getHtlc($args)
  * @method getHtlcByFrom($args)
@@ -91,7 +91,7 @@ use Codaone\BitShares\Exceptions\BitSharesException;
  * @method verifyAuthority($args)
  * @method call($api, $method, $args)
  */
-class BitShares extends Component\Base\Object
+class BitShares extends Component\Base\DataClass
 {
     /** @var bool */
     private static $initialized;
@@ -160,7 +160,6 @@ class BitShares extends Component\Base\Object
      */
     private function getWssResponse($rpcData)
     {
-        // @todo exception and error handling
         self::$wssClient->send($rpcData);
         $result = self::$wssClient->receive();
         return $this->getResponse($result);

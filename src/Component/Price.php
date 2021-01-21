@@ -1,13 +1,13 @@
 <?php
 
 namespace Codaone\BitShares\Component;
-use Codaone\BitShares\Component\Base\Object;
+use Codaone\BitShares\Component\Base\DataClass;
 
 /**
  * Class Price
  * @package Codaone\BitShares\Component
  */
-class Price extends Object
+class Price extends DataClass
 {
     /** @var float */
     protected $price;

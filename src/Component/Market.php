@@ -3,13 +3,13 @@
 namespace Codaone\BitShares\Component;
 
 use Codaone\BitShares\BitShares;
-use Codaone\BitShares\Component\Base\Object;
+use Codaone\BitShares\Component\Base\DataClass;
 
 /**
  * Class Market
  * @package Codaone\BitShares\Component
  */
-class Market extends Object
+class Market extends DataClass
 {
     /** @var Asset */
     protected $base;
@@ -80,7 +80,7 @@ class Market extends Object
 
     /**
      * @param int $limit
-     * @return Object
+     * @return DataClass
      */
     public function getOrderBook($limit = 25) {
         $bitShares = new BitShares();
@@ -106,13 +106,13 @@ class Market extends Object
             );
         }
         $data = ["asks" => $asks, "bids" => $bids];
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($data);
         return $dataObject;
     }
 
     /**
-     * @return Object
+     * @return DataClass
      */
     public function getTicker() {
         $bitShares = new BitShares();
@@ -127,7 +127,7 @@ class Market extends Object
         $data['highest_bid'] = new Price($this->getBase(), $this->getQuote(), $ticker["highest_bid"]);
         $data['latest'] = new Price($this->getBase(), $this->getQuote(), $ticker["latest"]);
         $data['percent_change'] = floatval($ticker['percent_change']);
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($data);
         return $dataObject;
     }
@@ -136,7 +136,7 @@ class Market extends Object
      * @param int            $limit
      * @param \DateTime|null $start
      * @param \DateTime|null $stop
-     * @return Object|array
+     * @return DataClass|array
      * @throws \Exception
      */
     public function getTrades($limit = 25, \DateTime $start = null, \DateTime $stop = null) {
@@ -155,7 +155,7 @@ class Market extends Object
             $start->format('Y-m-d\TH:i:s'),
             $limit
         );
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($trades);
         return $dataObject;
     }
@@ -163,7 +163,7 @@ class Market extends Object
     /**
      * @param Account|string $account
      * @param int $limit
-     * @return Object|array
+     * @return DataClass|array
      */
     public function getAccountTrades($account, $limit = 25) {
         if(!$account instanceof Account) {
@@ -182,14 +182,14 @@ class Market extends Object
                 $data[] = $trade;
             }
         }
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($data);
         return $dataObject;
     }
 
     /**
      * @param Account|string $account
-     * @return Object|array
+     * @return DataClass|array
      */
     public function getAccountOpenOrders($account) {
         if(!$account instanceof Account) {
@@ -207,7 +207,7 @@ class Market extends Object
                 $data[] = $order;
             }
         }
-        $dataObject = new Object;
+        $dataObject = new DataClass;
         $dataObject->setData($data);
         return $dataObject;
     }

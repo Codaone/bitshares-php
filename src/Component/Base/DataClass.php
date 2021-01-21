@@ -6,7 +6,7 @@ namespace Codaone\BitShares\Component\Base;
  * Class Object
  * @package Codaone\BitShares\Component
  */
-class Object implements \ArrayAccess, \Iterator
+class DataClass implements \ArrayAccess, \Iterator
 {
     /**
      * @var array
@@ -97,7 +97,7 @@ class Object implements \ArrayAccess, \Iterator
             } elseif (is_string($data)) {
                 $data = explode(PHP_EOL, $data);
                 $data = isset($data[$index]) ? $data[$index] : null;
-            } elseif ($data instanceof Object) {
+            } elseif ($data instanceof DataClass) {
                 $data = $data->getData($index);
             } else {
                 $data = null;
@@ -118,7 +118,7 @@ class Object implements \ArrayAccess, \Iterator
         foreach ($keys as $key) {
             if ((array)$data === $data && isset($data[$key])) {
                 $data = $data[$key];
-            } elseif ($data instanceof Object) {
+            } elseif ($data instanceof DataClass) {
                 $data = $data->getData($key);
             } else {
                 return null;
